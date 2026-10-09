@@ -71,6 +71,7 @@ const safeNote = (n) => ({
   authorUsername: n.authorUsername,
   type: n.type,
   text: n.text,
+  theme: n.theme || "tulip",
   response: n.response || "",
   createdAt: n.createdAt,
   respondedAt: n.respondedAt || null,
@@ -191,16 +192,21 @@ app.get("/api/notes/private", auth, async (req, res, next) => {
 });
 app.post("/api/notes", auth, async (req, res, next) => {
   try {
-    const text = typeof req.body?.text === "string" ? req.body.text.trim() : "",
-      type = req.body?.type;
+    const text = typeof req.body?.text === "string" ? req.body.text.trim() : "";
+    const type = req.body?.type;
+    const theme = req.body?.theme || "tulip";
     if (!text || text.length > 5000)
       return res.status(400).json({ error: "Note must be 1–5000 characters." });
     if (!["public", "private"].includes(type))
       return res.status(400).json({ error: "Choose public or private." });
+    if (!["tulip", "sunflower", "lily", "hydrangea"].includes(theme)) {
+      return res.status(400).json({ error: "Choose a valid plant theme." });
+    }
     const n = await Note.create({
       authorId: req.session.user.id,
       authorUsername: req.session.user.username,
       type,
+      theme,
       text,
     });
     res.status(201).json(safeNote(n));

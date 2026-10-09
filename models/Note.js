@@ -15,6 +15,12 @@ const schema = new mongoose.Schema(
       index: true,
     },
     text: { type: String, required: true, minlength: 1, maxlength: 5000 },
+    theme: {
+      type: String,
+      enum: ["tulip", "sunflower", "lily", "hydrangea"],
+      default: "tulip",
+      required: true,
+    },
     response: { type: String, default: "", maxlength: 5000 },
     createdAt: { type: Date, default: Date.now, required: true, index: true },
     respondedAt: { type: Date, default: null },

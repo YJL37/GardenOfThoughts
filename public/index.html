@@ -313,6 +313,11 @@
         image-rendering: pixelated;
       }
 
+      .plant-label {
+        color: #64839a;
+        font-size: 17px;
+      }
+
       .question,
       .answer {
         font-size: 22px;
@@ -344,6 +349,7 @@
         display: grid;
         place-items: center;
         padding: 18px;
+        z-index: 10;
       }
 
       .modal {
@@ -373,6 +379,93 @@
         display: flex;
         gap: 12px;
         margin: 14px 0;
+      }
+
+      .theme-picker {
+        margin: 18px 0;
+      }
+
+      .theme-picker-title {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .theme-options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .theme-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 76px;
+        padding: 10px;
+        border: 3px solid #9bbdd3;
+        background: #f7fcff;
+        cursor: pointer;
+      }
+
+      .theme-option:has(input:checked) {
+        border-color: var(--outline);
+        box-shadow: 4px 4px 0 var(--shadow);
+        background: #ffffff;
+      }
+
+      .theme-option input {
+        width: auto;
+        flex: 0 0 auto;
+        accent-color: var(--outline);
+      }
+
+      .theme-preview {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        border: 2px solid currentColor;
+        image-rendering: pixelated;
+      }
+
+      .theme-preview img {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+        image-rendering: pixelated;
+      }
+
+      .theme-preview .theme-fallback {
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .theme-option[data-theme="tulip"] {
+        color: #a9356b;
+        background: #ffe2f0;
+      }
+
+      .theme-option[data-theme="sunflower"] {
+        color: #b86b2d;
+        background: #fde4cf;
+      }
+
+      .theme-option[data-theme="lily"] {
+        color: #157a7c;
+        background: #d2fbfc;
+      }
+
+      .theme-option[data-theme="hydrangea"] {
+        color: #7552a5;
+        background: #e0d0f6;
+      }
+
+      .theme-name {
+        display: block;
+        color: var(--ink);
+        font-family: "VT323", "Courier New", monospace;
+        font-size: 21px;
       }
 
       .type-choice label {
@@ -554,6 +647,32 @@
               Private</label
             >
           </div>
+
+          <div class="theme-picker">
+            <span class="theme-picker-title">Choose your plant theme</span>
+            <div class="theme-options">
+              <label class="theme-option" data-theme="tulip">
+                <input type="radio" name="noteTheme" value="tulip" checked />
+                <span class="theme-name">Pink · Tulip</span>
+              </label>
+
+              <label class="theme-option" data-theme="sunflower">
+                <input type="radio" name="noteTheme" value="sunflower" />
+                <span class="theme-name">Orange · Sunflower</span>
+              </label>
+
+              <label class="theme-option" data-theme="lily">
+                <input type="radio" name="noteTheme" value="lily" />
+                <span class="theme-name">Green · Lily of the valley</span>
+              </label>
+
+              <label class="theme-option" data-theme="hydrangea">
+                <input type="radio" name="noteTheme" value="hydrangea" />
+                <span class="theme-name">Purple · Hydrangea</span>
+              </label>
+            </div>
+          </div>
+
           <textarea
             id="noteText"
             maxlength="5000"
@@ -571,6 +690,38 @@
       let me = null,
         tab = "personal";
       const $ = (id) => document.getElementById(id);
+      const PLANT_THEMES = {
+        tulip: {
+          label: "Tulip",
+          flowerEmoji: "🌷",
+        },
+        sunflower: {
+          label: "Sunflower",
+          flowerEmoji: "🌻",
+        },
+        lily: {
+          label: "Lily of the valley",
+          flowerEmoji: "🤍",
+        },
+        hydrangea: {
+          label: "Hydrangea",
+          flowerEmoji: "🌺",
+        },
+      };
+
+      function plantMarkup(note) {
+        const theme = PLANT_THEMES[note.theme] || PLANT_THEMES.tulip;
+        const bloomed = Boolean(note.response);
+
+        return `
+    <div class="plant">
+      <span>${bloomed ? theme.flowerEmoji : "🌱"}</span>
+      <span class="plant-label">
+        ${theme.label} · ${bloomed ? "Bloomed" : "Growing"}
+      </span>
+    </div>
+  `;
+      }
       async function api(path, opts = {}) {
         const r = await fetch("/api" + path, {
           credentials: "same-origin",
@@ -681,7 +832,14 @@
         b.innerHTML = `<div class="board-head"><h3>${tab === "public" ? "Public garden" : "Your garden"}</h3><button class="secondary" onclick="newNote()">＋ New note</button></div><div class="cards">${ns.length ? ns.map(card).join("") : `<div class="empty" style="grid-column:1/-1">🌱<br><br>${tab === "public" ? "The garden is waiting for its first note." : "You haven't planted a private note yet."}</div>`}</div>`;
       }
       function card(n) {
-        return `<article class="note-card" onclick="viewNote('${n._id}')"><div class="plant">${n.response ? "🌷" : "🌱"}</div><div class="question">Q: ${esc(n.text)}</div>${n.response ? `<div class="answer">A: ${esc(n.response)}</div>` : ""}<div class="meta">${date(n.createdAt)}</div></article>`;
+        return `
+    <article class="note-card" onclick="viewNote('${n._id}')">
+      ${plantMarkup(n)}
+      <div class="question">Q: ${esc(n.text)}</div>
+      ${n.response ? `<div class="answer">A: ${esc(n.response)}</div>` : ""}
+      <div class="meta">${date(n.createdAt)}</div>
+    </article>
+  `;
       }
       function renderAdmin(b, ns) {
         const open = ns.filter((n) => !n.response),
@@ -703,13 +861,17 @@
         $("noteModal").classList.add("hidden");
       }
       async function submitNote() {
-        const text = $("noteText").value.trim(),
-          type = document.querySelector("[name=noteType]:checked").value;
+        const text = $("noteText").value.trim();
+        const type = document.querySelector("[name=noteType]:checked").value;
+        const theme =
+          document.querySelector('[name="noteTheme"]:checked')?.value ||
+          "tulip";
+        type = document.querySelector("[name=noteType]:checked").value;
         if (!text) return alert("Please write something first.");
         try {
           await api("/notes", {
             method: "POST",
-            body: JSON.stringify({ text, type }),
+            body: JSON.stringify({ text, type, theme }),
           });
           closeModal();
           await switchTab(type === "public" ? "public" : "personal");
