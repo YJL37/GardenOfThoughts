@@ -1,4 +1,4 @@
-# Little Garden 🌱🌸 — MongoDB edition
+# Garden of Thoughts 🌱🌷 — MongoDB edition
 
 ## What is included
 - Existing cute public/private notes interface
@@ -28,4 +28,3 @@
 - Never publish `.env` or put MongoDB credentials in frontend JavaScript.
 - For production, use HTTPS and set `NODE_ENV=production`; the session cookie will then be secure-only.
 - This is a starter project, not a security audit. Test permissions before using real or sensitive messages. Add a privacy notice, backups, abuse controls and retention policies before public launch.
-# GardenOfThoughts
