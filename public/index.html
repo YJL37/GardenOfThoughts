@@ -484,15 +484,15 @@
         b.innerHTML = `<div class="board-head"><h3>${tab === "public" ? "Public garden" : "Your notes"}</h3><button class="secondary" onclick="newNote()">＋ New note</button></div><div class="cards">${ns.length ? ns.map(card).join("") : `<div class="empty" style="grid-column:1/-1">🌱<br><br>${tab === "public" ? "The garden is waiting for its first note." : "You haven't planted a private note yet."}</div>`}</div>`;
       }
       function card(n) {
-        return `<article class="note-card" onclick="viewNote('${n._id}')"><div class="plant">${n.response ? "🌸" : "🌱"}</div><div class="question">Q: ${esc(n.text)}</div>${n.response ? `<div class="answer">A: ${esc(n.response)}</div>` : ""}<div class="meta">${date(n.createdAt)}</div></article>`;
+        return `<article class="note-card" onclick="viewNote('${n._id}')"><div class="plant">${n.response ? "🌷" : "🌱"}</div><div class="question">Q: ${esc(n.text)}</div>${n.response ? `<div class="answer">A: ${esc(n.response)}</div>` : ""}<div class="meta">${date(n.createdAt)}</div></article>`;
       }
       function renderAdmin(b, ns) {
         const open = ns.filter((n) => !n.response),
           done = ns.filter((n) => n.response);
-        b.innerHTML = `<div class="board-head"><h3>Admin garden</h3></div><section class="admin-section"><h4>🌱 Waiting for an answer (${open.length})</h4>${open.length ? open.map(adminCard).join("") : '<div class="empty">Everything is answered 🌸</div>'}</section><section class="admin-section"><h4>🌸 Answered (${done.length})</h4>${done.map(adminCard).join("")}</section>`;
+        b.innerHTML = `<div class="board-head"><h3>Admin garden</h3></div><section class="admin-section"><h4>🌱 Waiting for an answer (${open.length})</h4>${open.length ? open.map(adminCard).join("") : '<div class="empty">Everything is answered 🌷</div>'}</section><section class="admin-section"><h4>🌷 Answered (${done.length})</h4>${done.map(adminCard).join("")}</section>`;
       }
       function adminCard(n) {
-        return `<div class="admin-note"><div class="admin-row"><b>${n.type === "public" ? "🌍 Public" : "🔒 Private"}</b><small>from ${esc(n.authorUsername)} · ${date(n.createdAt)}</small></div><p><b>Q:</b> ${esc(n.text)}</p>${n.response ? `<p><b>A:</b> ${esc(n.response)}</p>` : `<div class="reply-area"><textarea id="reply-${n._id}" maxlength="5000" placeholder="Write your answer..."></textarea><div class="modal-actions"><button class="secondary" onclick="deleteNote('${n._id}')">Delete</button><button class="primary" onclick="answer('${n._id}')">Answer 🌸</button></div></div>`}</div>`;
+        return `<div class="admin-note"><div class="admin-row"><b>${n.type === "public" ? "🌍 Public" : "🔒 Private"}</b><small>from ${esc(n.authorUsername)} · ${date(n.createdAt)}</small></div><p><b>Q:</b> ${esc(n.text)}</p>${n.response ? `<p><b>A:</b> ${esc(n.response)}</p>` : `<div class="reply-area"><textarea id="reply-${n._id}" maxlength="5000" placeholder="Write your answer..."></textarea><div class="modal-actions"><button class="secondary" onclick="deleteNote('${n._id}')">Delete</button><button class="primary" onclick="answer('${n._id}')">Answer 🌷</button></div></div>`}</div>`;
       }
       function newNote() {
         $("noteModal").classList.remove("hidden");
@@ -527,7 +527,7 @@
           $("newNoteFields").classList.add("hidden");
           $("viewNoteFields").classList.remove("hidden");
           $("modalTitle").textContent = n.response
-            ? "🌷 Answered note"
+            ? "🌷 Answered Note"
             : "🌱 Note";
           $("modalSubtitle").textContent =
             n.type === "public" ? "Public" : "Private";

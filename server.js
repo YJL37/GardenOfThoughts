@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express"),
   mongoose = require("mongoose"),
   bcrypt = require("bcryptjs"),
@@ -85,7 +86,7 @@ async function ensureAdmin() {
       passwordHash: process.env.ADMIN_PASSWORD_HASH.trim(),
       role: "admin",
     });
-  else if (u.role !== "admin") {
+  else {
     u.role = "admin";
     u.passwordHash = process.env.ADMIN_PASSWORD_HASH.trim();
     await u.save();
@@ -97,11 +98,9 @@ app.post("/api/auth/signup", async (req, res, next) => {
         typeof req.body?.username === "string" ? req.body.username.trim() : "",
       password = req.body?.password;
     if (!/^[a-zA-Z0-9_-]{3,24}$/.test(username))
-      return res
-        .status(400)
-        .json({
-          error: "Username must be 3–24 characters: letters, numbers, _ or -.",
-        });
+      return res.status(400).json({
+        error: "Username must be 3–24 characters: letters, numbers, _ or -.",
+      });
     if (
       typeof password !== "string" ||
       password.length < 8 ||
