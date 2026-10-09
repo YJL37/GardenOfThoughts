@@ -3,99 +3,191 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Little Garden</title>
+    <title>Garden of Thoughts</title>
+
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap");
+
       :root {
-        --ink: #414141;
-        --paper: #fffdf9;
+        --ink: #28465e;
+        --paper: #ffffff;
+        --sky: #bfe5ff;
+        --sky-light: #dff2ff;
+        --sky-deep: #8dcaf2;
+        --outline: #527e9d;
+        --shadow: #8ab9d8;
+        --pink: #f7d8e8;
+        --mint: #d5f1e6;
+        --lilac: #e8e0ff;
       }
+
       * {
         box-sizing: border-box;
       }
+
       body {
-        margin: 0;
-        background: #eeeae6;
+        background-color: #dff2ff;
+        background-image: url("images/sky-tile.png");
+        background-repeat: repeat;
+        background-position: top left;
+        background-size: 440px 440px;
         color: var(--ink);
-        font-family: "Trebuchet MS", system-ui, sans-serif;
+        font-family: "VT323", "Courier New", monospace;
+        font-size: 20px;
       }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      .tab,
+      button,
+      .brand h2 {
+        font-family: "Press Start 2P", "Courier New", monospace;
+        line-height: 1.6;
+      }
+
+      h1 {
+        font-size: clamp(17px, 3vw, 24px);
+      }
+
+      h2 {
+        font-size: clamp(13px, 2vw, 17px);
+      }
+
+      h3 {
+        font-size: 13px;
+      }
+
+      h4 {
+        font-size: 10px;
+      }
+
       button,
       input,
       textarea {
         font: inherit;
       }
+
       button {
         cursor: pointer;
       }
+
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 3px dashed #477fa6;
+        outline-offset: 3px;
+      }
+
       .hidden {
         display: none !important;
       }
+
       #loginScreen {
         min-height: 100vh;
         display: grid;
         place-items: center;
         padding: 20px;
       }
+
       .login-card {
-        width: min(420px, 100%);
+        width: min(440px, 100%);
         background: var(--paper);
-        border: 1px solid #888;
-        border-radius: 20px;
+        border: 4px solid var(--outline);
+        box-shadow: 8px 8px 0 var(--shadow);
         padding: 30px;
         text-align: center;
       }
+
       .field {
         text-align: left;
         margin: 14px 0;
       }
+
       .field label {
         display: block;
         margin-bottom: 6px;
       }
+
       input,
       textarea {
         width: 100%;
         padding: 11px;
-        border: 1px solid #aaa;
-        border-radius: 9px;
+        border: 3px solid var(--outline);
+        border-radius: 0;
+        background: #f7fcff;
+        color: var(--ink);
       }
+
       textarea {
         min-height: 110px;
         resize: vertical;
       }
+
       .primary,
       .secondary {
+        min-height: 46px;
         padding: 10px 13px;
-        border: 1px solid #666;
-        border-radius: 9px;
+        border: 3px solid var(--outline);
+        border-radius: 0;
+        box-shadow: 4px 4px 0 var(--shadow);
+        transition:
+          transform 0.08s ease,
+          box-shadow 0.08s ease;
       }
+
       .primary {
-        background: #414141;
-        color: white;
+        background: var(--sky-deep);
+        color: #183b54;
       }
+
       .secondary {
-        background: white;
+        background: var(--sky-light);
+        color: var(--ink);
       }
+
+      .primary:hover,
+      .secondary:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 5px 5px 0 var(--shadow);
+      }
+
+      .primary:active,
+      .secondary:active {
+        transform: translate(3px, 3px);
+        box-shadow: 1px 1px 0 var(--shadow);
+      }
+
       .wide {
         width: 100%;
         margin-top: 8px;
       }
+
       .text-button {
         border: 0;
         background: none;
+        color: #356d94;
         text-decoration: underline;
         margin-top: 14px;
+        font-family: "VT323", monospace;
+        font-size: 22px;
       }
+
       .error {
-        color: #b44;
+        color: #b23b68;
         min-height: 20px;
       }
+
       #app {
         padding: 28px 14px;
       }
+
       .shell {
         max-width: 920px;
         margin: auto;
       }
+
       header,
       .board-head,
       .admin-row {
@@ -104,104 +196,166 @@
         align-items: center;
         gap: 12px;
       }
+
       header {
         margin-bottom: 22px;
       }
+
       .brand {
         display: flex;
         gap: 10px;
         align-items: center;
       }
+
       .brand h2 {
         margin: 0;
       }
+
       .welcome,
       small,
       .meta {
-        color: #888;
-        font-size: 12px;
+        color: #64839a;
+        font-size: 16px;
       }
+
+      /* PIXEL FOLDER TABS */
       .tabs {
         display: flex;
-        gap: 4px;
+        align-items: stretch;
+        gap: 0;
+        padding-left: 8px;
       }
+
       .tab {
-        border: 1px solid #888;
+        min-height: 54px;
+        padding: 10px 18px;
+        border: 3px solid var(--outline);
         border-bottom: 0;
-        border-radius: 10px 10px 0 0;
-        padding: 10px 22px;
-        background: #eeeae6;
+        background: var(--sky);
+        color: #315e7b;
+        box-shadow: 4px 0 0 rgba(82, 126, 157, 0.12);
+        font-size: 9px;
+        margin-top: 7px;
+        position: relative;
+        z-index: 1;
       }
+
+      .tab + .tab {
+        margin-left: -3px;
+      }
+
+      .tab:hover {
+        background: #d5edff;
+      }
+
+      /* The selected folder is white */
+
       .tab.active {
         background: var(--paper);
+        color: #28465e;
+        margin-top: 0;
+        min-height: 61px;
+        position: relative;
+        z-index: 3;
+        box-shadow: none;
+        border-bottom: 3px solid var(--paper);
+        margin-bottom: -3px;
       }
+
       .board {
+        position: relative;
         background: var(--paper);
-        border: 1px solid #888;
-        border-radius: 0 12px 12px 12px;
+        border: 3px solid var(--outline);
+        box-shadow: 7px 7px 0 var(--shadow);
         min-height: 550px;
         padding: 24px;
       }
+
       .board-head {
         margin-bottom: 22px;
       }
+
       .board-head h3 {
-        font-weight: 500;
+        font-weight: normal;
       }
+
       .cards {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
         gap: 16px;
       }
+
       .note-card {
-        background: white;
-        border: 1px solid #777;
+        background: #f4fbff;
+        border: 3px solid #83b6d8;
+        box-shadow: 4px 4px 0 #c0e2f7;
         padding: 16px;
         min-height: 175px;
         cursor: pointer;
         overflow-wrap: anywhere;
       }
+
+      .note-card:nth-child(3n + 2) {
+        background: #f5f1ff;
+        border-color: #b6a8e6;
+        box-shadow: 4px 4px 0 #ddd4ff;
+      }
+
+      .note-card:nth-child(3n) {
+        background: #f0fbf6;
+        border-color: #8dcbb3;
+        box-shadow: 4px 4px 0 #cceee0;
+      }
+
       .plant {
         font-size: 30px;
         margin-bottom: 10px;
+        image-rendering: pixelated;
       }
+
       .question,
       .answer {
-        font-size: 14px;
+        font-size: 22px;
         white-space: pre-wrap;
-        line-height: 1.45;
+        line-height: 1.25;
       }
+
       .answer {
-        border-top: 1px dashed #bbb;
+        border-top: 2px dashed #9bbdd3;
         padding-top: 10px;
         margin-top: 10px;
       }
+
       .meta {
         text-align: right;
         margin-top: 12px;
       }
+
       .empty {
         text-align: center;
-        color: #999;
+        color: #64839a;
         padding: 70px 10px;
       }
+
       .overlay {
         position: fixed;
         inset: 0;
-        background: #0004;
+        background: rgba(39, 76, 105, 0.38);
         display: grid;
         place-items: center;
         padding: 18px;
       }
+
       .modal {
         width: min(560px, 100%);
         max-height: 90vh;
         overflow: auto;
         background: var(--paper);
-        border: 1px solid #888;
-        border-radius: 15px;
+        border: 4px solid var(--outline);
+        box-shadow: 8px 8px 0 var(--shadow);
         padding: 24px;
       }
+
       .modal-head,
       .modal-actions {
         display: flex;
@@ -209,46 +363,89 @@
         align-items: center;
         gap: 10px;
       }
+
       .modal-actions {
         justify-content: flex-end;
         margin-top: 12px;
       }
+
       .type-choice {
         display: flex;
         gap: 12px;
         margin: 14px 0;
       }
+
       .type-choice label {
-        border: 1px solid #aaa;
-        border-radius: 9px;
+        border: 3px solid #9bbdd3;
+        background: var(--sky-light);
         padding: 9px;
       }
+
       .type-choice input {
         width: auto;
       }
+
       .admin-section {
         margin-bottom: 25px;
       }
+
       .admin-note {
-        border: 1px solid #bbb;
-        border-radius: 10px;
+        border: 3px solid #9bbdd3;
         padding: 13px;
         margin: 10px 0;
-        background: white;
+        background: #f5fbff;
         overflow-wrap: anywhere;
       }
+
       .reply-area {
         margin-top: 12px;
       }
+
       @media (max-width: 600px) {
         .board {
           padding: 15px;
         }
+
         .cards {
           grid-template-columns: 1fr;
         }
+
         header {
           align-items: flex-start;
+        }
+
+        .tabs {
+          padding-left: 0;
+        }
+
+        .tab {
+          flex: 1;
+          padding: 8px 5px;
+          font-size: 7px;
+        }
+
+        .board-head {
+          align-items: flex-start;
+        }
+
+        .board-head .secondary {
+          max-width: 48%;
+        }
+
+        .login-card {
+          padding: 22px;
+        }
+
+        .modal {
+          padding: 16px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
         }
       }
     </style>
@@ -257,7 +454,7 @@
     <section id="loginScreen">
       <div class="login-card">
         <div style="font-size: 46px">🌱</div>
-        <h1>Little Garden</h1>
+        <h1>Garden of Thoughts</h1>
         <p>A place for questions to grow.</p>
         <div id="loginForm">
           <div class="field">
@@ -308,7 +505,7 @@
           <div class="brand">
             <span style="font-size: 32px">🌿</span>
             <div>
-              <h2>Little Garden</h2>
+              <h2>Garden of Thoughts</h2>
               <div id="welcomeText" class="welcome"></div>
             </div>
           </div>
@@ -481,7 +678,7 @@
         const ns = await api(
           tab === "public" ? "/notes/public" : "/notes/private",
         );
-        b.innerHTML = `<div class="board-head"><h3>${tab === "public" ? "Public garden" : "Your notes"}</h3><button class="secondary" onclick="newNote()">＋ New note</button></div><div class="cards">${ns.length ? ns.map(card).join("") : `<div class="empty" style="grid-column:1/-1">🌱<br><br>${tab === "public" ? "The garden is waiting for its first note." : "You haven't planted a private note yet."}</div>`}</div>`;
+        b.innerHTML = `<div class="board-head"><h3>${tab === "public" ? "Public garden" : "Your garden"}</h3><button class="secondary" onclick="newNote()">＋ New note</button></div><div class="cards">${ns.length ? ns.map(card).join("") : `<div class="empty" style="grid-column:1/-1">🌱<br><br>${tab === "public" ? "The garden is waiting for its first note." : "You haven't planted a private note yet."}</div>`}</div>`;
       }
       function card(n) {
         return `<article class="note-card" onclick="viewNote('${n._id}')"><div class="plant">${n.response ? "🌷" : "🌱"}</div><div class="question">Q: ${esc(n.text)}</div>${n.response ? `<div class="answer">A: ${esc(n.response)}</div>` : ""}<div class="meta">${date(n.createdAt)}</div></article>`;
